@@ -28,7 +28,12 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Extract Version Info
+        id: version
         uses: ./.github/actions/generate-version
+
+      - name: Echo Version Info
+        run: |
+          echo "Version Info: ${{ steps.version.outputs.short_sha }}"
 
       - name: Build and Push Docker Image
         uses: ./.github/actions/docker-build
@@ -54,6 +59,4 @@ jobs:
           image-tag: ${{ needs.build.outputs.image_tag }}
 
       - name: Deployment Notification
-        uses: username/repository-name@v1
-        with:
-          message: "Image updated in k8s-config repo. ArgoCD will deploy the new version."
+        run: echo "Image updated in k8s-config repo. ArgoCD will deploy the new version."
